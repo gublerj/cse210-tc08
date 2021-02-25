@@ -32,8 +32,10 @@ class HandleCollisionsAction(Action):
 
 
     def _handle_paddle(self):
-        pass
-
+        for symbol in len(paddle.get_text()):
+            if ball.get_position() == (paddle.get_position() + symbol):
+                coordinate = ball.get_velocity()
+                x = 
 
 
     def _handle_brick(self):
