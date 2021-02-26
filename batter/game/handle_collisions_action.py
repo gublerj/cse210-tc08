@@ -17,12 +17,11 @@ class HandleCollisionsAction(Action):
     
     
     def _handle_wall(self):
-        if ball.get_x() == 0 or ball.get_x() == constants.MAX_X:
-            coordinate = ball.get_velocity()
-            x = coordinate[0]
-            y = coordinate[1]
-            _velocity = Point(x * -1, y)
-            ball.set_velocity(_velocity)
+        coordinate = self.ball.get_velocity()
+        x = coordinate.get_x()
+        y = coordinate.get_y()
+        _velocity = Point(x * -1, y)
+        self.ball.set_velocity(_velocity)
 
 
     def _handle_ceiling(self):
@@ -32,10 +31,11 @@ class HandleCollisionsAction(Action):
 
 
     def _handle_paddle(self):
-        for symbol in len(paddle.get_text()):
-            if ball.get_position() == (paddle.get_position() + symbol):
-                coordinate = ball.get_velocity()
-                x = 
+            coordinate = ball.get_velocity()
+            x = coordinate.get_x()
+            y = coordinate.get_y()
+            _velocity = Point(x * -1, y)
+            ball.set_velocity(_velocity)
 
 
     def _handle_brick(self):
@@ -57,17 +57,24 @@ class HandleCollisionsAction(Action):
     # floor (maybe?)
 
 
-    # def execute(self, cast):
-    #     """Executes the action using the given actors.
+    def execute(self, cast):
+        """Executes the action using the given actors.
 
-    #     Args:
-    #         cast (dict): The game actors {key: tag, value: list}.
-    #     """
-    #     marquee = cast["marquee"][0] # there's only one
-    #     robot = cast["robot"][0] # there's only one
-    #     artifacts = cast["artifact"]
-    #     marquee.set_text("")
-    #     for artifact in artifacts:
-    #         if robot.get_position().equals(artifact.get_position()):
-    #             description = artifact.get_description()
-    #             marquee.set_text(description)
+        Args:
+            cast (dict): The game actors {key: tag, value: list}.
+        """
+        self.paddle = cast["paddle"][0] # there's only one
+        self.ball = cast["ball"][0] # there's only one
+        self.bricks = cast["brick"]
+        position = self.ball.get_position()
+        x = position.get_x()
+        y = position.get_y()
+        if x == constants.MAX_X:
+            print("yes")
+        if x == 1 or x == constants.MAX_X - 1:
+            self._handle_wall()
+        for symbol in range(len(self.paddle.get_text())):
+            paddle_position = self.paddle.get_position()
+            paddle_position = paddle_position.add(Point(symbol, 0))
+            if self.ball.get_position() == (paddle_position):
+                self.handle_paddle()
