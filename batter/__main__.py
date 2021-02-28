@@ -10,6 +10,7 @@ from game.move_actors_action import MoveActorsAction
 from game.input_service import InputService
 from game.output_service import OutputService
 from asciimatics.screen import Screen 
+from game.score import Score
 
 def main(screen):
 
@@ -52,6 +53,9 @@ def main(screen):
     move_actors_action = MoveActorsAction()
     handle_collisions_acition = HandleCollisionsAction()
     draw_actors_action = DrawActorsAction(output_service)
+
+    score = Score()
+    cast["score"] = [score]
     
     script["input"] = [control_actors_action]
     script["update"] = [move_actors_action, handle_collisions_acition]
