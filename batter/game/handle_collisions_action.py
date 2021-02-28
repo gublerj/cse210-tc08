@@ -2,6 +2,7 @@ import random
 from game import constants
 from game.action import Action
 from game.point import Point
+import sys
 
 class HandleCollisionsAction(Action):
     """A code template for handling collisions. The responsibility of this class of objects is to update the game state when actors collide.
@@ -25,27 +26,37 @@ class HandleCollisionsAction(Action):
 
 
     def _handle_ceiling(self):
-        if ball.get_y() == 0:
-            pass
+        coordinate = self.ball.get_velocity()
+        x = coordinate.get_x()
+        y = coordinate.get_y()
+        _velocity = Point(x, y * -1)
+        self.ball.set_velocity(_velocity)
 
 
 
     def _handle_paddle(self):
-            coordinate = ball.get_velocity()
-            x = coordinate.get_x()
-            y = coordinate.get_y()
-            _velocity = Point(x * -1, y)
-            ball.set_velocity(_velocity)
+        coordinate = self.ball.get_velocity()
+        x = coordinate.get_x()
+        y = coordinate.get_y()
+        _velocity = Point(x, y * -1)
+        self.ball.set_velocity(_velocity)
+        print("enter")
 
 
-    def _handle_brick(self):
-        pass
+    def _handle_brick(self, n):
+        brick = self.bricks[n]
+        coordinate = self.ball.get_velocity()
+        x = coordinate.get_x()
+        y = coordinate.get_y()
+        _velocity = Point(x, y * -1)
+        self.ball.set_velocity(_velocity)
+        self.bricks.pop(n)
 
 
 
     def _handle_floor(self):
         # game over
-        pass
+        sys.exit()
 
 
     # function for each
@@ -75,6 +86,15 @@ class HandleCollisionsAction(Action):
             self._handle_wall()
         for symbol in range(len(self.paddle.get_text())):
             paddle_position = self.paddle.get_position()
-            paddle_position = paddle_position.add(Point(symbol, 0))
-            if self.ball.get_position() == (paddle_position):
-                self.handle_paddle()
+            paddle_position = paddle_position.add(Point(symbol, -1))
+            if self.ball.get_position().equals(paddle_position):
+                self._handle_paddle()
+            elif y == constants.MAX_Y - 1:
+                self._handle_floor()
+        if y == 1:
+            self._handle_ceiling()
+        for symbol in range(len(self.bricks) - 1):
+            brick = self.bricks[symbol]
+            if self.ball.get_position().equals(brick.get_position()):
+                self._handle_brick(symbol)
+        
