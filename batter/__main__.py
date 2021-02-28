@@ -54,11 +54,6 @@ def main(screen):
     handle_collisions_acition = HandleCollisionsAction()
     draw_actors_action = DrawActorsAction(output_service)
 
-    #position = Point(1, 0)
-    #score = Actor()
-    #value = 0
-    #score.set_value(value)
-    #score.set_text(f"Score: {value}")
     score = Score()
     cast["score"] = [score]
     
