@@ -40,7 +40,6 @@ class HandleCollisionsAction(Action):
         y = coordinate.get_y()
         _velocity = Point(x, y * -1)
         self.ball.set_velocity(_velocity)
-        print("enter")
 
 
     def _handle_brick(self, n):
@@ -51,11 +50,13 @@ class HandleCollisionsAction(Action):
         _velocity = Point(x, y * -1)
         self.ball.set_velocity(_velocity)
         self.bricks.pop(n)
+        self.value.add_points(1)
 
 
 
     def _handle_floor(self):
         # game over
+        print(f"final score = {self.value.get_points()}")
         sys.exit()
 
 
@@ -77,11 +78,10 @@ class HandleCollisionsAction(Action):
         self.paddle = cast["paddle"][0] # there's only one
         self.ball = cast["ball"][0] # there's only one
         self.bricks = cast["brick"]
+        self.value = cast["score"][0]
         position = self.ball.get_position()
         x = position.get_x()
         y = position.get_y()
-        if x == constants.MAX_X:
-            print("yes")
         if x == 1 or x == constants.MAX_X - 1:
             self._handle_wall()
         for symbol in range(len(self.paddle.get_text())):
